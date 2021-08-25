@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Store</title>
+</head>
+<body>
+<h1 style="text-align: center;">Welcome to our store</h1>
+<form action="" method="GET">
+    <input type="text" name="price" placeholder="Введите цену">
+    <input type="submit" value="Найти">
+</form>
+<div style="text-align: center; font-size: 2em;">
+    {% for product in products %}
+    {{ product.product_name }} {{ product.product_price }} руб.
+    {% endfor %}
+
+</div>
+</body>
+</html>
