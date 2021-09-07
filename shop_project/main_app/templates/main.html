@@ -1,20 +1,55 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Store</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 <h1 style="text-align: center;">Welcome to our store</h1>
-<form action="" method="GET">
-    <input type="text" name="price" placeholder="Введите цену">
-    <input type="submit" value="Найти">
+<h3 style="text-align: center; font-color: red;">{{ message }}</h3>
+<div id="filter">
+    <form action="" method="GET">
+    <table>
+        <tr>
+            <td>
+                {{ form.product_name.label }}
+                {{ form.product_name }}
+            </td>
+            <td>
+                {{ form.category_name.label }}
+                {{ form.category_name }}
+            </td>
+            <td>
+                {{ form.product_price.label }}
+                {{ form.product_price }}
+            </td>
+            <td>
+                {{ form.gl.label }}
+                {{ form.gl }}
+            </td>
+            <td>
+                <input type="submit" value="Найти">
+            </td>
+        </tr>
+    </table>
 </form>
-<div style="text-align: center; font-size: 2em;">
+</div>
+<div>
     {% for product in products %}
-    {{ product.product_name }} {{ product.product_price }} руб.
+    <div class="product_card">
+        <div>
+            {% for category in product.product_categories.all %} {{ category }} {% endfor %}
+        </div>
+        <div>
+        {{ product.product_name }} {{ product.product_price }} руб.
+        </div>
+    </div>
     {% endfor %}
-
+</div>
+<div>
+    <a href="{% url 'main_app:create_product' %}"><button>Добавить товар</button></a>
 </div>
 </body>
 </html>

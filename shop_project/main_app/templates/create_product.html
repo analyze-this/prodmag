@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Store</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table class="table">
+        {% for field in form %}
+            <tr class="product_tr">
+                <td class="product_td">
+                    {{ field.label }}
+                </td>
+                <td class="product_td">
+                    {{ field }}
+                </td>
+            </tr>
+
+        {% endfor %}
+            <tr class="product_tr">
+                <td class="product_td">
+
+                </td>
+                <td class="product_td">
+                    <input type="submit" value="Создать">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</body>
