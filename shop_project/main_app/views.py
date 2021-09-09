@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from .models import *
@@ -38,6 +39,7 @@ def main_view(request):
     return render(request, template_name='main.html', context={'products': products, 'form': form})
 
 
+@login_required
 def create_product_view(request):
     if request.method == 'POST':
         form = CreateProductForm(request.POST)

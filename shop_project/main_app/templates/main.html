@@ -7,6 +7,26 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+
+<a href="{% url 'accounts:login' %}">
+    <button>Войти</button>
+</a>
+
+{% if user.is_authenticated %}
+<p>Welcome, {{ user.username }}</p>
+<a href="{% url 'accounts:logout' %}">
+    <button>Выйти</button>
+</a>
+{% else %}
+<a href="{% url 'accounts:registration' %}">
+    <button>Зарегистрироваться</button>
+</a>
+{% endif %}
+<div style="float: right;">
+    <a href="{% url 'main_app:create_product' %}"><button>Добавить товар</button></a>
+</div>
+
+
 <h1 style="text-align: center;">Welcome to our store</h1>
 <h3 style="text-align: center; font-color: red;">{{ message }}</h3>
 <div id="filter">
@@ -48,8 +68,6 @@
     </div>
     {% endfor %}
 </div>
-<div>
-    <a href="{% url 'main_app:create_product' %}"><button>Добавить товар</button></a>
-</div>
+
 </body>
 </html>
