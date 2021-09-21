@@ -2,7 +2,10 @@ from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.views.generic.base import View, TemplateView
+
 from .models import *
 from .forms import *
 from slugify import slugify
@@ -30,7 +33,8 @@ def main_view(request):
                     return render(request, template_name='main.html', context={'products': products, 'form': form,
                                                                                'message': 'Цена должна быть числом выше 0'})
             except ValueError:
-                return render(request, template_name='main.html', context={'products': products, 'form': form, 'message': 'Укажите цену в числовом формате'})
+                return render(request, template_name='main.html', context={'products': products, 'form': form,
+                                                                           'message': 'Укажите цену в числовом формате'})
         if request.GET.get('category_name'):
             category_name_id = int(request.GET['category_name'])
             complex_request.append(Q(product_categories=category_name_id))
@@ -51,4 +55,74 @@ def create_product_view(request):
         form = CreateProductForm()
         return render(request, template_name='create_product.html', context={'form': form})
 
+
+class ClassView(View):
+    def get(self, request):
+        products = Product.objects.all()
+        return render(request, template_name='view.html', context={'message': 'Hello', 'products': products})
+
+    def post(self, request):
+        return redirect('main_app:main')
+
+
+class TemplateClassView(TemplateView):
+    template_name = 'templateview.html'
+    extra_context = {'message': 'Hello again!'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        context['key'] = 'New page'
+        print(**kwargs)
+        print(self.request.__dict__)
+        return context
+
+
+class ClassListView(ListView):
+    model = Product
+    context_object_name = 'products'
+    template_name = 'listview.html'
+
+
+class MyDetailView(DetailView):
+    model = Product
+    template_name = 'detailview.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print("context befor: ", context)
+        context['category'] = Category.objects.all()
+        print('context after: ', context)
+        return context
+
+
+class MainWithCategory(ListView):
+    model = Product
+    template_name = 'supermain1.html'
+    paginate_by = 4
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories_list = Category.objects.all()
+        context['categories'] = categories_list
+        return context
+
+
+class MainWithCategory2(ListView):
+    model = Product
+    template_name = 'supermain1.html'
+    paginate_by = 3
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        qs = super().get_queryset()
+        category = get_object_or_404(Category, pk=category_id)
+        products = qs.filter(product_categories=category)
+        return products
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories_list = Category.objects.all()
+        context['categories'] = categories_list
+        return context
 

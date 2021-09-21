@@ -51,7 +51,6 @@ class Product(models.Model):
     product_categories = models.ManyToManyField('Category', verbose_name='Категории', blank=True)
     product_description = models.TextField(verbose_name="Описание товара", blank=True, null=True)
 
-
     def __str__(self):
         return f'{self.product_name} ({self.product_countriesoforigin})'
 
