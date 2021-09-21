@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'main_app:supermain' %}">Главная</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
@@ -55,12 +55,16 @@
 
 
 <!-- Page content -->
+
 <div class="content">
+	{% block content %}
     <div class="card-group card mb-3" style="row row-cols-1 row-cols-md-3 g-4">
     {% for product in object_list %}
-        <div class="col">
+        <div class="col-2">
              <div class="card h-100">
-                  <img src="{{ product.product_image.url }}" class="card-img-top"  alt="...">
+	             <a href="{% url 'main_app:productdetail' product.pk %}"><img src="{{ product.product_image.url }}"
+	                                                               class="card-img-top" style="width:276px;"
+	                                                       alt="..."></a>
                   <div class="card-body">
                     <h5 class="card-title">{{ product.product_name }}</h5>
                     <p class="card-text">{{ product.product_price }}</p>
@@ -71,6 +75,7 @@
         </div>
     {% endfor %}
     </div>
+	{% endblock content %}
 </div>
 
 </body>

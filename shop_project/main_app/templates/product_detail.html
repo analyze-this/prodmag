@@ -1,0 +1,25 @@
+{% extends 'supermain1.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="coupon">
+  <div class="container">
+    <h3>{{ product.product_name }}</h3>
+  </div>
+  <img src="{{ product.product_image.url }}" alt="Avatar" style="width: 100%;">
+  <div class="container" style="background-color:white">
+    <h2><b>{{ product.product_price }} руб.</b></h2>
+    <p>Описание: {{ product.product_description }}</p>
+  </div>
+  <div class="container">
+    <p>Наличие на складе:
+	    <span class="promo">{% if product.is_available %}В наличии {{ product.product_quantity }} {{ product.product_units }} {% else %}Нет в
+		    наличии{% endif %}</span></p>
+    <p class="expire">Категория: {% for category in product.product_categories.all %}{{ category.category_name }}{% endfor %}</p>
+  </div>
+</div>
+
+{% endblock content %}
+
+
