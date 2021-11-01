@@ -99,7 +99,7 @@ class MyDetailView(DetailView):
 class MainWithCategory(ListView):
     model = Product
     template_name = 'supermain1.html'
-    paginate_by = 4
+    # paginate_by = 4
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -126,3 +126,14 @@ class MainWithCategory2(ListView):
         context['categories'] = categories_list
         return context
 
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'product_detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories_list = Category.objects.all()
+        context['categories'] = categories_list
+        return context
