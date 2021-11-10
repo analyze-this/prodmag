@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <table class="table">
         {% for field in form %}
@@ -23,7 +23,6 @@
         {% endfor %}
             <tr class="product_tr">
                 <td class="product_td">
-
                 </td>
                 <td class="product_td">
                     <input type="submit" value="Создать">

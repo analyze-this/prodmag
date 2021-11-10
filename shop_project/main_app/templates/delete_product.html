@@ -1,0 +1,32 @@
+{% extends 'supermain1.html' %}
+
+{% load static %}
+
+{% block content %}
+<h2>Удаление продукта</h2>
+<form action="" method="POST" style="margin: auto;">
+	{% csrf_token %}
+	<table>
+		<tr>
+			<td>
+				{{ product.product_name }}
+			</td>
+			<td>
+			
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+			
+			</td>
+			<td>
+				<input type="submit" value="Подтвердить удаление">
+			</td>
+		</tr>
+	</table>
+	
+	
+</form>
+
+{% endblock content %}

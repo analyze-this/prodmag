@@ -1,10 +1,13 @@
 from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import View, TemplateView
+from .custom_mixin import GetContextDataMixin
 
 from .models import *
 from .forms import *
@@ -71,10 +74,11 @@ class TemplateClassView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
+        # print(context)
         context['key'] = 'New page'
-        print(**kwargs)
-        print(self.request.__dict__)
+        # print(self.kwargs)
+        # print(context)
+        # print(self.request.__dict__)
         return context
 
 
@@ -84,56 +88,56 @@ class ClassListView(ListView):
     template_name = 'listview.html'
 
 
-class MyDetailView(DetailView):
+class MyDetailView(GetContextDataMixin, DetailView):
     model = Product
     template_name = 'detailview.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        print("context befor: ", context)
-        context['category'] = Category.objects.all()
-        print('context after: ', context)
-        return context
+    # pk_url_kwarg - переопределит название URL параметра в urls.py
 
 
-class MainWithCategory(ListView):
+class MainWithCategory(GetContextDataMixin, ListView):
     model = Product
     template_name = 'supermain1.html'
     # paginate_by = 4
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        categories_list = Category.objects.all()
-        context['categories'] = categories_list
-        return context
 
-
-class MainWithCategory2(ListView):
+class MainWithCategory2(GetContextDataMixin, ListView):
     model = Product
     template_name = 'supermain1.html'
-    paginate_by = 3
+    # paginate_by = 3
 
     def get_queryset(self):
+        # print(' self.kwargs: ',  self.kwargs)
         category_id = self.kwargs['category_id']
         qs = super().get_queryset()
+        # print('get_queryset returns: ', qs)
         category = get_object_or_404(Category, pk=category_id)
         products = qs.filter(product_categories=category)
         return products
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        categories_list = Category.objects.all()
-        context['categories'] = categories_list
-        return context
 
-
-class ProductDetailView(DetailView):
+class ProductDetailView(GetContextDataMixin, DetailView):
     model = Product
     template_name = 'product_detail.html'
     context_object_name = 'product'
+    pk_url_kwarg = 'product_id'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        categories_list = Category.objects.all()
-        context['categories'] = categories_list
-        return context
+
+class CreateProductView(LoginRequiredMixin, GetContextDataMixin, CreateView):
+    form_class = CreateProductForm
+    template_name = 'form_create_product.html'
+    success_url = reverse_lazy('main_app:supermain')
+
+
+class UpdateProductView(LoginRequiredMixin, GetContextDataMixin, UpdateView):
+    form_class = CreateProductForm
+    template_name = 'update_product.html'
+    success_url = reverse_lazy('main_app:supermain')
+    model = Product
+    pk_url_kwarg = 'product_id'
+
+
+class DeleteProductView(GetContextDataMixin, DeleteView):
+    model = Product
+    template_name = 'delete_product.html'
+    success_url = reverse_lazy('main_app:supermain')
+

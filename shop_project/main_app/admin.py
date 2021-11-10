@@ -25,6 +25,6 @@ class UnitOfMeasureAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'product_name', 'product_description', 'product_price', 'product_quantity',
-                    'product_units', 'product_image', 'is_available', 'product_countriesoforigin')
+                    'product_units', 'product_image', 'is_available', 'product_countriesoforigin', 'get_product_categories')
     prepopulated_fields = {'product_slug': ('product_name', )}
     list_editable = ('product_price', 'product_quantity', 'is_available')

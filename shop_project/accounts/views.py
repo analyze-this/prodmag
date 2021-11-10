@@ -24,6 +24,8 @@ def registration_view(request):
 
 
 def login_view(request):
+    url = request.GET['next']
+    print(url)
     form = LoginForm()
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -34,15 +36,17 @@ def login_view(request):
                 user = User.objects.get(username=username)
                 if user.check_password(password):
                     login(request, user)
-                    return redirect('main_app:main')
+                    return redirect(url)
                 return render(request, template_name='login.html', context={'form': form, 'warning': 'Неверный пароль'})
             else:
                 warning = 'Такой пользователь не зарегистрирован в системе'
                 return render(request, template_name='login.html', context={'form': form, 'warning': warning})
+
     return render(request, template_name='login.html', context={'form': form})
 
 
 def logout_view(request):
+    url = request.GET['url_logout']
     logout(request)
-    return redirect('main_app:main')
+    return redirect(url)
 
