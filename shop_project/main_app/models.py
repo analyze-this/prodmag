@@ -70,3 +70,10 @@ class Product(models.Model):
         else:
             return 'У этого товара нет категории'
 
+
+class FeedbackModel(models.Model):
+    product_name = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name="Наименование продукта")
+    title = models.CharField(max_length=150, verbose_name="Заголовок")
+    content = models.TextField(verbose_name='Содержание')
+
+
